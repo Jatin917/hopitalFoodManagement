@@ -12,3 +12,137 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// schema.prisma
+
+enum Role {
+  ADMIN
+  PANTRY_STAFF
+  DELIVERY_PERSONNEL
+}
+
+enum MealType {
+  MORNING
+  EVENING
+  NIGHT
+}
+
+enum MealStatus {
+  NOT_ASSIGNED
+  PENDING
+  IN_PREPARATION
+  READY_FOR_DELIVERY
+  DELIVERED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  password    String
+  role        Role
+  contactInfo String?
+  assignedTasks PantryTask[] @relation("PantryStaffTasks") 
+  deliveryTasks DeliveryTask[] @relation("DeliveryPersonnelTasks")
+  Pantry Pantry? @relation("PantryStaffTasks", fields: [Pantryid], references: [id])
+  Pantryid Int?
+  mealTrackingDelivery MealTracking[] @relation("AssignedDelivery")
+  mealTrackingPantry MealTracking[] @relation("AssignedPantry")
+}
+
+model Patient {
+  id              Int      @id @default(autoincrement())
+  name            String
+  diseases        String[] // List of diseases
+  allergies       String[] // List of allergies
+  roomNumber      String
+  bedNumber       String
+  floorNumber     Int
+  age             Int
+  gender          Gender
+  contactInfo     String
+  emergencyContact String
+  otherDetails    String?
+  dietChart       DietChart? // One-to-one with DietChart
+  mealTracking    MealTracking?
+}
+
+model DietChart {
+  id              Int      @id @default(autoincrement())
+  patientId       Int @unique
+  patient         Patient  @relation(fields: [patientId], references: [id])
+  morningMeal     Meal   @relation("MorningMeal", fields: [morningMealId], references: [id])
+  morningMealId   Int @unique
+  eveningMeal     Meal    @relation("EveningMeal", fields: [eveningMealId], references: [id])
+  eveningMealId   Int @unique
+  nightMeal       Meal   @relation("NightMeal", fields: [nightMealId], references: [id])
+  nightMealId     Int @unique
+}
+
+model Meal {
+  id              Int      @id @default(autoincrement())
+  ingredients     String[] // List of ingredients
+  instructions    String?  // Optional instructions
+  mealType        MealType
+  status          MealStatus @default(PENDING)
+  pantryTask      PantryTask?
+  deliveryTask    DeliveryTask?
+  morningDietChart DietChart? @relation("MorningMeal")
+  eveningDietChart DietChart? @relation("EveningMeal")
+  nightDietChart   DietChart? @relation("NightMeal")
+  mealTracking     MealTracking?
+}
+
+model Pantry {
+  id          Int      @id @default(autoincrement())
+  name        String
+  contactInfo String
+  location    String
+  staff       User[]   @relation("PantryStaffTasks")
+}
+
+model PantryTask {
+  id          Int      @id @default(autoincrement())
+  staffId     Int
+  staff       User     @relation("PantryStaffTasks", fields: [staffId], references: [id])
+  mealId      Int @unique
+  meal        Meal     @relation(fields: [mealId], references: [id])
+  status      MealStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DeliveryTask {
+  id               Int      @id @default(autoincrement())
+  deliveryPersonId Int
+  deliveryPerson   User     @relation("DeliveryPersonnelTasks", fields: [deliveryPersonId], references: [id])
+  mealId           Int @unique
+  meal             Meal     @relation(fields: [mealId], references: [id])
+  status           MealStatus @default(READY_FOR_DELIVERY)
+  deliveredAt      DateTime?
+  deliveryNotes    String?
+}
+model MealTracking {
+  id              Int       @id @default(autoincrement())
+  mealId          Int?       @unique
+  meal            Meal?      @relation(fields: [mealId], references: [id])
+  patientId       Int?        @unique
+  patient         Patient?   @relation(fields: [patientId], references: [id])
+  roomNumber      String    // From Patient
+  status          MealStatus @default(NOT_ASSIGNED) // Track preparation and delivery status
+  assignedPantry  User?     @relation("AssignedPantry", fields: [pantryStaffId], references: [id])
+  pantryStaffId   Int?
+  deliveryPerson  User?     @relation("AssignedDelivery", fields: [deliveryPersonId], references: [id])
+  deliveryPersonId Int?
+  preparedAt      DateTime? // Timestamp for when the meal was prepared
+  deliveredAt     DateTime? // Timestamp for when the meal was delivered
+  deliveryNotes   String?   // Optional notes from delivery personnel
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
