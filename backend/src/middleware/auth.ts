@@ -5,7 +5,7 @@ interface RESULT_PAYLOAD  {
     id:string
 }
 
-const authMiddleware = (req: any, res: any, next: any) =>{
+export const authMiddleware = (req: any, res: any, next: any) =>{
     try {
         const SECRET_KEY = process.env.SECRET_KEY_JWT || "";
         const token = req.headers.authorization.split(" ")[1];
@@ -14,6 +14,7 @@ const authMiddleware = (req: any, res: any, next: any) =>{
             return res.status(UNAUTHORIZED).json({message:"User not found"});
         }
         req.userId = result.id;
+        next();
     } catch (error) {
         console.log((error as Error).message);
         return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})
