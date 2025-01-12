@@ -86,13 +86,13 @@ model DietChart {
 }
 
 model Meal {
-  id              Int      @id @default(autoincrement())
-  ingredients     String[] // List of ingredients
-  instructions    String?  // Optional instructions
-  mealType        MealType
-  status          MealStatus @default(PENDING)
-  pantryTask      PantryTask?
-  deliveryTask    DeliveryTask?
+  id               Int      @id @default(autoincrement())
+  ingredients      String[] // List of ingredients
+  instructions     String?  // Optional instructions
+  mealType         MealType
+  status           MealStatus @default(PENDING)
+  pantryTask       PantryTask?
+  deliveryTask     DeliveryTask?
   morningDietChart DietChart? @relation("MorningMeal")
   eveningDietChart DietChart? @relation("EveningMeal")
   nightDietChart   DietChart? @relation("NightMeal")
