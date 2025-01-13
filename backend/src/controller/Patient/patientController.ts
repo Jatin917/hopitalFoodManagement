@@ -1,13 +1,18 @@
 import { prisma } from "../../server";
-import { CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode";
+import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode";
+import { PatientSchema, PatientType } from "../../utils/typesDefinition";
+import { z } from "zod";
 
 export const createPatient = async (req:any, res:any) =>{
     try {
+        const result = PatientSchema.safeParse(req.body);
+        if(!result.success){
+          return res.status(BAD_REQUEST).json({message:"Validation of Data Error"}); 
+        }
         const {
           name, diseases, allergies, roomNumber, bedNumber, floorNumber,
-          age, gender, contactInfo, emergencyContact, otherDetails,
-        } = req.body;
-    
+          age, gender, contactInfo, emergencyContact
+        } = result.data;
         const newPatient = await prisma.patient.create({
           data: {
             name,
@@ -20,7 +25,6 @@ export const createPatient = async (req:any, res:any) =>{
             gender,
             contactInfo,
             emergencyContact,
-            otherDetails,
           },
         });
     
@@ -32,7 +36,7 @@ export const createPatient = async (req:any, res:any) =>{
 
 export const getPatients = async (req:any, res:any) => {
     try {
-      const patients = await prisma.patient.findMany();
+      const patients: PatientType[] = await prisma.patient.findMany();
       return res.status(OK).json(patients);
     } catch (error) {
       return res.status(INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch patients.' });
@@ -41,10 +45,9 @@ export const getPatients = async (req:any, res:any) => {
   
 export const getPatient =  async (req:any, res:any) => {
     try {
-      const patient = await prisma.patient.findUnique({
+      const patient: (PatientType | null) = await prisma.patient.findUnique({
         where: { id: parseInt(req.params.id) },
       });
-  
       if (!patient) {
         return res.status(NOT_FOUND).json({ error: 'Patient not found.' });
       }
@@ -57,11 +60,14 @@ export const getPatient =  async (req:any, res:any) => {
 
 export const updatePatientDetail = async (req:any, res:any) => {
     try {
+      const result = PatientSchema.safeParse(req.body);
+      if(!result.success){
+        return res.status(BAD_REQUEST).json({message:"Validation of Data Error"}); 
+      }
       const {
         name, diseases, allergies, roomNumber, bedNumber, floorNumber,
-        age, gender, contactInfo, emergencyContact, otherDetails,
-      } = req.body;
-  
+        age, gender, contactInfo, emergencyContact, 
+      } = result.data;
       const updatedPatient = await prisma.patient.update({
         where: { id: parseInt(req.params.id) },
         data: {
@@ -75,7 +81,6 @@ export const updatePatientDetail = async (req:any, res:any) => {
           gender,
           contactInfo,
           emergencyContact,
-          otherDetails,
         },
       });
   

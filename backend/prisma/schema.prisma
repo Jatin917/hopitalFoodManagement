@@ -68,7 +68,6 @@ model Patient {
   gender          Gender
   contactInfo     String
   emergencyContact String
-  otherDetails    String?
   dietChart       DietChart? // One-to-one with DietChart
   mealTracking    MealTracking?
 }

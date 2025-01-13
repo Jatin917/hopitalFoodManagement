@@ -1,11 +1,15 @@
 import { prisma } from "../../server";
-import { CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, OK } from "../../utils/statusCode";
-
+import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode";
+import { DietChartSchema, DietChartType } from "../../utils/typesDefinition";
+import z from 'zod'
 
 export const createDietChart = async (req:any, res:any) => {
     try {
-      const { patientId, morningMealId, eveningMealId, nightMealId } = req.body;
-  
+      const dietChart = DietChartSchema.safeParse(req.body);
+      if(!dietChart.success){
+        return res.status(BAD_REQUEST).json({message:"Validation of Data Error"});
+      }
+      const { patientId, morningMealId, eveningMealId, nightMealId } = dietChart.data;
       const newDietChart = await prisma.dietChart.create({
         data: {
           patientId,
@@ -23,10 +27,9 @@ export const createDietChart = async (req:any, res:any) => {
   
 export const getAllDietCharts =  async (req:any, res:any) => {
     try {
-      const dietCharts = await prisma.dietChart.findMany({
+      const dietCharts: (DietChartType[] | null) = await prisma.dietChart.findMany({
         include: { patient: true, morningMeal: true, eveningMeal: true, nightMeal: true },
-      });
-  
+      }) ;
       res.status(OK).json(dietCharts);
     } catch (error) {
       res.status(INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch diet charts.' });
@@ -35,15 +38,13 @@ export const getAllDietCharts =  async (req:any, res:any) => {
   
 export const getSingleDietChart =  async (req:any, res:any) => {
     try {
-      const dietChart = await prisma.dietChart.findUnique({
+      const dietChart: (DietChartType | null) = await prisma.dietChart.findUnique({
         where: { id: parseInt(req.params.id) },
         include: { patient: true, morningMeal: true, eveningMeal: true, nightMeal: true },
       });
-  
       if (!dietChart) {
-        return res.status(404).json({ error: 'Diet chart not found.' });
+        return res.status(NOT_FOUND).json({ error: 'Diet chart not found.' });
       }
-  
       res.status(OK).json(dietChart);
     } catch (error) {
       res.status(INTERNAL_SERVER_ERROR).json({ error: 'Failed to fetch diet chart.' });
@@ -52,8 +53,11 @@ export const getSingleDietChart =  async (req:any, res:any) => {
   
 export const updateDietChart =  async (req:any, res:any) => {
     try {
-      const { morningMealId, eveningMealId, nightMealId } = req.body;
-  
+      const result = DietChartSchema.safeParse(req.body);
+      if(!result.success){
+        return res.status(BAD_REQUEST).json({message:"Validation of Data Error"});
+      }
+      const { morningMealId, eveningMealId, nightMealId } = result.data
       const updatedDietChart = await prisma.dietChart.update({
         where: { id: parseInt(req.params.id) },
         data: {
