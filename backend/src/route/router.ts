@@ -13,5 +13,5 @@ router.get("/", (req, res)=>{
 router.use('/patients', authMiddleware, patientRouter);
 router.use('/diet-charts',authMiddleware, foodManagementRouter);
 router.use('/user', userRouter);
-router.use('/pantry',authMiddleware, pantryRouter);
+router.use('/pantry', pantryRouter);
 export default router;

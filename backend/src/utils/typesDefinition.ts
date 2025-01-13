@@ -36,10 +36,10 @@ export type UserType = z.infer<typeof UserSchema>;
 export const PantryStaffSchema = z.object({
   name: z.string(),
   email: z.string().email(),
-  role: RoleEnum,
-  contactInfo: z.string(),
+  role: z.literal("PANTRY_STAFF"),
+  contactInfo: z.string().optional(),
 });
-export type PantryStaffType = z.infer<typeof UserSchema>;
+export type PantryStaffType = z.infer<typeof PantryStaffSchema>;
 
 export const SignUpSchema = z.object({
   name: z.string(),
@@ -85,11 +85,9 @@ export type DietChartType = z.infer<typeof DietChartSchema>;
 
 // Meal schema
 export const MealSchema = z.object({
-  id: z.number().optional(),
   ingredients: z.array(z.string()),
   instructions: z.string().optional(),
   mealType: MealTypeEnum,
-  status: MealStatusEnum,
 });
 export type MealType = z.infer<typeof MealSchema>;
 
@@ -104,24 +102,29 @@ export type PantryType = z.infer<typeof PantrySchema>;
 
 // PantryTask schema
 export const PantryTaskSchema = z.object({
-  id: z.number().optional(),
   staffId: z.number(),
   mealId: z.number(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt:z.date().optional(),
+  updatedAt:z.date().optional()
 });
 export type PantryTaskType = z.infer<typeof PantryTaskSchema>;
 
 // DeliveryTask schema
 export const DeliveryTaskSchema = z.object({
-  id: z.number().optional(),
   deliveryPersonId: z.number(),
   mealId: z.number(),
-  status: MealStatusEnum,
   deliveredAt: z.date().optional(),
   deliveryNotes: z.string().optional(),
 });
 export type DeliveryTaskType = z.infer<typeof DeliveryTaskSchema>;
+
+export const DeliveryPersonSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  role: z.literal("PANTRY_STAFF"),
+  contactInfo: z.string().optional(),
+});
+export type DeliveryPersonType = z.infer<typeof DeliveryPersonSchema>;
 
 // MealTracking schema
 export const MealTrackingSchema = z.object({

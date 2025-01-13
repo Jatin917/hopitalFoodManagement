@@ -1,5 +1,5 @@
 import express from 'express'
-import { createDietChart, deleteDietChart, getAllDietCharts, getSingleDietChart, updateDietChart } from '../../controller/FootManagement/foodManagementController';
+import { createDietChart, createMeal, deleteDietChart, getAllDietCharts, getSingleDietChart, updateDietChart } from '../../controller/FootManagement/foodManagementController';
 
 const foodManagementRouter = express.Router();
 
@@ -8,5 +8,6 @@ foodManagementRouter.get('/:id', getAllDietCharts);
 foodManagementRouter.get('/', getSingleDietChart);
 foodManagementRouter.put('/:id', updateDietChart);
 foodManagementRouter.delete('/:id', deleteDietChart);
+foodManagementRouter.post('/createmeal', createMeal);
 
 export default foodManagementRouter

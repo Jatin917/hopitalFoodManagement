@@ -1,6 +1,6 @@
 import { prisma } from "../../server";
 import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode";
-import { DietChartSchema, DietChartType } from "../../utils/typesDefinition";
+import { DietChartSchema, DietChartType, MealSchema, MealType } from "../../utils/typesDefinition";
 import z from 'zod'
 
 export const createDietChart = async (req:any, res:any) => {
@@ -85,3 +85,20 @@ export const deleteDietChart =  async (req:any, res:any) => {
     }
   };
   
+  export const createMeal = async (req:any, res:any) =>{
+    try {
+      const result = MealSchema.safeParse(req.body);
+      if(!result.success){
+        return res.status(BAD_REQUEST).json({message:"Validation of Data Error"});
+      }
+      const meal = result.data
+      const {ingredients, instructions, mealType} = meal;
+      const response = await prisma.meal.create({data:{ingredients, instructions, mealType}});
+      if(!response){
+        return res.status(BAD_REQUEST).json({message:"Please Try Again"});
+      }
+      return res.status(CREATED).json({message:"Created Successfully"});
+    } catch (error) {
+      res.status(INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete diet chart.' });
+  }
+}

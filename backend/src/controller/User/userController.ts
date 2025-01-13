@@ -32,7 +32,7 @@ export const userSignUp = async (req: any, res:any) =>{
             return res.status(BAD_REQUEST).json({message:"Please Try again"});
         }
         const id = String(response.id);
-        const token = jwt.sign(id, SECRET_KEY);
+        const token = jwt.sign({id:id}, SECRET_KEY);
         return res.status(CREATED).json({token:token});
     } catch (error) {
         return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})
@@ -58,7 +58,7 @@ export const userSignIn = async (req:any, res:any) =>{
             return res.status(NOT_FOUND).json({message:"Please create an account to continue"});
         }
         const id = String(userExist.id);
-        const token = jwt.sign(id, SECRET_KEY);
+        const token = jwt.sign({id:id}, SECRET_KEY);
         return res.status(OK).json({token:token});
     } catch (error) {
         return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})
