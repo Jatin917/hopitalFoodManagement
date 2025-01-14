@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../Components/ui/ca
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../Components/ui/table';
 import { Badge } from '../../Components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../Components/ui/select';
-import { Clock, Truck, ChefHat, CheckCircle, Box } from 'lucide-react';
+import { Truck, ChefHat, CheckCircle, Box } from 'lucide-react';
 import Navbar from '../../Components/Navbar/Navbar';
 import { getDeliveryPerson, getPantryTaskStaff } from '../api';
 import { toast } from 'react-toastify';
@@ -74,9 +74,6 @@ const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) =
     } 
     fetchData();
   },[])
-    function task(value: never, index: number, array: never[]): ReactNode {
-        throw new Error('Function not implemented.');
-    }
 
   return (
     <>
