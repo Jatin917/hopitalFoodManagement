@@ -145,3 +145,28 @@ export const MealTrackingSchema = z.object({
   updatedAt: z.date(),
 });
 export type MealTrackingType = z.infer<typeof MealTrackingSchema>;
+
+// Staff Information
+export type Staff = {
+  name: string; // Staff name
+  Pantry: {
+    name: string; // Pantry name
+  };
+};
+
+// Meal Information
+export type Meal = {
+  mealType: string; // Meal type (e.g., NIGHT, BREAKFAST)
+};
+
+// Main Data Type
+export type pantryTaskType = {
+  id: number; // Unique identifier for the meal tracking entry
+  staffId: number; // ID of the staff member
+  mealId: number; // ID of the meal
+  status: "READY_FOR_DELIVERY" | "DELIVERED" | "IN_PROGRESS"; // Status of the meal
+  createdAt: string; // Date and time when the record was created
+  updatedAt: string; // Date and time when the record was last updated
+  staff: Staff; // Staff details
+  meal: Meal; // Meal details
+};

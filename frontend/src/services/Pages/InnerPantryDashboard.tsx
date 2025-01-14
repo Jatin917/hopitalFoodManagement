@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../Components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '../../Components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../Components/ui/table';
@@ -7,37 +7,21 @@ import { Badge } from '../../Components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../Components/ui/select';
 import { Clock, Truck, ChefHat, CheckCircle, Box } from 'lucide-react';
 import Navbar from '../../Components/Navbar/Navbar';
+import { getDeliveryPerson, getPantryTaskStaff } from '../api';
+import { toast } from 'react-toastify';
+import { pantryTaskType } from '../../utils/typeDefinition';
 
 
 interface propsType {
     isLoggedIn: boolean;
     setIsLoggedIn: (arg0: boolean) => void;
   }
+
 const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) => {
   // Sample data - in a real app, this would come from an API
-  const [preparationTasks] = useState([
-    {
-      id: 1,
-      mealType: "Lunch",
-      patientName: "John Doe",
-      roomNumber: "201",
-      dietRequirements: "Low sodium, No dairy",
-      status: "In Progress",
-      assignedTo: "Chef Mike",
-      deliveryTime: "12:00 PM"
-    }
-  ]);
+  const [preparationTasks, setPreparationTasks] = useState([]);
 
-  const [deliveryStaff] = useState([
-    {
-      id: 1,
-      name: "Tom Wilson",
-      contact: "+1-555-0126",
-      status: "Available",
-      currentDeliveries: 2,
-      zone: "Floor 2-3"
-    }
-  ]);
+  const [deliveryStaff, setDeliveryStaff] = useState([]);
 
   const [mealBoxes] = useState([
     {
@@ -69,6 +53,30 @@ const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) =
       </Badge>
     );
   };
+
+  useEffect(()=>{
+    async function fetchData(){
+        const response = await getPantryTaskStaff();
+        if(response.success){
+            setPreparationTasks(response.data);
+        }
+        toast.info(response.message);
+    } 
+    fetchData();
+  },[])
+  useEffect(()=>{
+    async function fetchData(){
+        const response = await getDeliveryPerson();
+        if(response.success){
+            setDeliveryStaff(response.data);
+        }
+        toast.info(response.message);
+    } 
+    fetchData();
+  },[])
+    function task(value: never, index: number, array: never[]): ReactNode {
+        throw new Error('Function not implemented.');
+    }
 
   return (
     <>
@@ -115,28 +123,29 @@ const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) =
                 <TableHeader>
                   <TableRow>
                     <TableHead>Meal Type</TableHead>
-                    <TableHead>Patient Info</TableHead>
-                    <TableHead>Diet Requirements</TableHead>
                     <TableHead>Assigned To</TableHead>
+                    <TableHead>Pantry</TableHead>
+                    <TableHead>Assigned At</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Delivery Time</TableHead>
+                    {/* <TableHead>Delivery Time</TableHead> */}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {preparationTasks.map(task => (
-                    <TableRow key={task.id}>
-                      <TableCell>{task.mealType}</TableCell>
-                      <TableCell>
+                  {preparationTasks?.map((task:pantryTaskType) => (
+                    <TableRow key={task?.id}>
+                      <TableCell>{task?.meal?.mealType}</TableCell>
+                      <TableCell>{task?.staff?.name}</TableCell>
+                      {/* <TableCell>
                         <div>{task.patientName}</div>
                         <div className="text-sm text-gray-500">Room {task.roomNumber}</div>
-                      </TableCell>
-                      <TableCell>{task.dietRequirements}</TableCell>
-                      <TableCell>{task.assignedTo}</TableCell>
+                      </TableCell> */}
+                      <TableCell>{task.staff?.Pantry.name}</TableCell>
+                      <TableCell>{task?.updatedAt}</TableCell>
                       <TableCell>{getStatusBadge(task.status)}</TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <Clock className="w-4 h-4 inline mr-1" />
                         {task.deliveryTime}
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -157,20 +166,20 @@ const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) =
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Contact</TableHead>
-                    <TableHead>Zone</TableHead>
+                    {/* <TableHead>Zone</TableHead> */}
                     <TableHead>Current Deliveries</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {deliveryStaff.map(staff => (
+                  {deliveryStaff.map((staff:any) => (
                     <TableRow key={staff.id}>
                       <TableCell className="font-medium">{staff.name}</TableCell>
-                      <TableCell>{staff.contact}</TableCell>
-                      <TableCell>{staff.zone}</TableCell>
-                      <TableCell>{staff.currentDeliveries}</TableCell>
-                      <TableCell>{getStatusBadge(staff.status)}</TableCell>
+                      <TableCell>{staff.contactInfo || "NA"}</TableCell>
+                      {/* <TableCell>{staff.zone}</TableCell> */}
+                      <TableCell>{staff.deliveryTasks.length}</TableCell>
+                      <TableCell>{getStatusBadge(staff.deliveryTasks[0]?.status)}</TableCell>
                       <TableCell>
                         <Select defaultValue="assign">
                           <SelectTrigger className="w-32">

@@ -72,3 +72,23 @@ export const getPantryStaff = async () =>{
         return { success: false, message: "An error occurred." };
     }
 }
+export const getPantryTaskStaff = async () =>{
+    try {
+        const response = await api.get('/pantry/getPantryTask');
+            if(!response) return {success:false, message:"Cannot Fetched Data"};
+        return {success:true, message:response.data.message, data:response.data.data}
+    } catch (error) {
+        console.error((error as Error).message);
+        return { success: false, message: "An error occurred." };
+    }
+}
+export const getDeliveryPerson = async () =>{
+    try {
+        const response = await api.get('/pantry/getDeliveryPerson');
+            if(!response) return {success:false, message:"Cannot Fetched Data"};
+        return {success:true, message:response.data.message, data:response.data.data}
+    } catch (error) {
+        console.error((error as Error).message);
+        return { success: false, message: "An error occurred." };
+    }
+}
