@@ -1,7 +1,7 @@
 import { any } from "zod";
-import { prisma } from "../../server";
-import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from "../../utils/statusCode";
-import { DeliveryTaskSchema, MealStatusEnum, MealStatusType, PantrySchema, PantryStaffSchema, PantryStaffType, PantryTaskSchema, PantryType, UserSchema } from "../../utils/typesDefinition";
+import { prisma } from "../../server.js";
+import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from "../../utils/statusCode.js";
+import { DeliveryTaskSchema, MealStatusEnum, MealStatusType, PantrySchema, PantryStaffSchema, PantryStaffType, PantryTaskSchema, PantryType, UserSchema } from "../../utils/typesDefinition.js";
 
 export const createPantryController = async(req:any, res:any) =>{
     try {

@@ -1,5 +1,5 @@
 import express from 'express'
-import { createDietChart, createMeal, deleteDietChart, getAllDietCharts, getSingleDietChart, updateDietChart } from '../../controller/FootManagement/foodManagementController';
+import { createDietChart, createMeal, deleteDietChart, getAllDietCharts, getSingleDietChart, updateDietChart } from '../../controller/FootManagement/foodManagementController.js';
 
 const foodManagementRouter = express.Router();
 

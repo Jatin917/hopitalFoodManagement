@@ -1,9 +1,9 @@
 import express from 'express'
-import patientRouter from './patient/patient';
-import foodManagementRouter from './foodManagement/foodManagement';
-import { authMiddleware } from '../middleware/auth';
-import userRouter from './User/user';
-import pantryRouter from './pantry/pantryRouter';
+import patientRouter from './patient/patient.js';
+import foodManagementRouter from './foodManagement/foodManagement.js';
+import { authMiddleware } from '../middleware/auth.js';
+import userRouter from './User/user.js';
+import pantryRouter from './pantry/pantryRouter.js';
 
 const router = express.Router();
 

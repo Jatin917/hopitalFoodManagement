@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { INTERNAL_SERVER_ERROR, NO_CONTENT, OK, UNAUTHORIZED } from '../utils/statusCode';
-import { prisma } from '../server';
+import { INTERNAL_SERVER_ERROR, NO_CONTENT, OK, UNAUTHORIZED } from '../utils/statusCode.js';
+import { prisma } from '../server.js';
 
 interface RESULT_PAYLOAD  {
     id:string

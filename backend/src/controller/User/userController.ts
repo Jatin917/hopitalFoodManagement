@@ -1,7 +1,7 @@
-import { prisma } from "../../server";
-import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from "../../utils/statusCode";
+import { prisma } from "../../server.js";
+import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from "../../utils/statusCode.js";
 import jwt from 'jsonwebtoken'
-import { SignInSchema, SignUpSchema, UserSchema, UserType } from "../../utils/typesDefinition";
+import { SignInSchema, SignUpSchema, UserSchema, UserType } from "../../utils/typesDefinition.js";
 import { any } from "zod";
 
 

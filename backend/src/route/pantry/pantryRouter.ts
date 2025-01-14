@@ -1,6 +1,6 @@
 import express from "express";
-import { addStaffMemberController, assignMealBoxToDeliveryPersonnel, assignTask, changeMealStatusDelivery, changeMealStatusPantry, createPantryController, getPantryStaff, MealTrackingController } from "../../controller/Pantry/pantryController";
-import { authMiddleware, pantryAdminMiddleware, pantryStaffMiddleware, deliveryStaffMiddleware } from "../../middleware/auth";
+import { addStaffMemberController, assignMealBoxToDeliveryPersonnel, assignTask, changeMealStatusDelivery, changeMealStatusPantry, createPantryController, getPantryStaff, MealTrackingController } from "../../controller/Pantry/pantryController.js";
+import { authMiddleware, pantryAdminMiddleware, pantryStaffMiddleware, deliveryStaffMiddleware } from "../../middleware/auth.js";
 
 const pantryRouter = express.Router();
 

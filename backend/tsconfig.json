@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */
@@ -25,9 +27,9 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "moduleResolution": "node",
+    // "moduleResolution": "node",
     "resolveJsonModule": true,
-    "module": "ESNext",
+    // "module": "ESNext",
     "target": "ES2020",
 /* Specify what module code is generated. */
     "rootDir": "src",                                  /* Specify the root folder within your source files. */

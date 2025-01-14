@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv'
-import router from './route/router';
+import router from './route/router.js';
 import { PrismaClient } from '@prisma/client';
 
 dotenv.config();

@@ -1,6 +1,6 @@
-import { prisma } from "../../server";
-import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode";
-import { DietChartSchema, DietChartType, MealSchema, MealType } from "../../utils/typesDefinition";
+import { prisma } from "../../server.js";
+import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode.js";
+import { DietChartSchema, DietChartType, MealSchema, MealType } from "../../utils/typesDefinition.js";
 import z from 'zod'
 
 export const createDietChart = async (req:any, res:any) => {

@@ -1,6 +1,6 @@
-import { prisma } from "../../server";
-import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode";
-import { PatientSchema, PatientType } from "../../utils/typesDefinition";
+import { prisma } from "../../server.js";
+import { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, NO_CONTENT, NOT_FOUND, OK } from "../../utils/statusCode.js";
+import { PatientSchema, PatientType } from "../../utils/typesDefinition.js";
 import { z } from "zod";
 
 export const createPatient = async (req:any, res:any) =>{
