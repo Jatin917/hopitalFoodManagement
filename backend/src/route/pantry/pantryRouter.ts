@@ -1,5 +1,5 @@
 import express from "express";
-import { addStaffMemberController, assignMealBoxToDeliveryPersonnel, assignTask, changeMealStatusDelivery, changeMealStatusPantry, createPantryController } from "../../controller/Pantry/pantryController";
+import { addStaffMemberController, assignMealBoxToDeliveryPersonnel, assignTask, changeMealStatusDelivery, changeMealStatusPantry, createPantryController, getPantryStaff, MealTrackingController } from "../../controller/Pantry/pantryController";
 import { authMiddleware, pantryAdminMiddleware, pantryStaffMiddleware, deliveryStaffMiddleware } from "../../middleware/auth";
 
 const pantryRouter = express.Router();
@@ -10,5 +10,6 @@ pantryRouter.post('/assignPantryTask',authMiddleware, pantryAdminMiddleware, ass
 pantryRouter.post('/assignDeliveryTask',authMiddleware, pantryStaffMiddleware, assignMealBoxToDeliveryPersonnel);
 pantryRouter.put('/changeStatusPantry',authMiddleware, pantryStaffMiddleware, changeMealStatusPantry);
 pantryRouter.put('/changeStatusDelivery',authMiddleware, deliveryStaffMiddleware, changeMealStatusDelivery);
-
+pantryRouter.get('/getPantryStaff', getPantryStaff);
+pantryRouter.get('/getMealTracking', MealTrackingController);
 export default pantryRouter

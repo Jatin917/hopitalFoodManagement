@@ -1,3 +1,4 @@
+import { any } from "zod";
 import { prisma } from "../../server";
 import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from "../../utils/statusCode";
 import { DeliveryTaskSchema, MealStatusEnum, MealStatusType, PantrySchema, PantryStaffSchema, PantryStaffType, PantryTaskSchema, PantryType, UserSchema } from "../../utils/typesDefinition";
@@ -169,6 +170,45 @@ export const assignMealBoxToDeliveryPersonnel = async(req:any, res:any) =>{
       return res.status(BAD_REQUEST).json({message:"please try again"});
     }
     return res.status(CREATED).json({message:"created successfully", data:response});
+  } catch (error) {
+    return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})    
+  }
+}
+export const getPantryStaff= async (req:any, res:any) =>{
+  try {
+    const response = await prisma.user.findMany({
+      where: {
+        role: 'PANTRY_STAFF'  // Adjust the field name as per your model (if it is different)
+      },
+      include:{
+        Pantry:true,
+        assignedTasks:{
+          select:{
+            status:true,
+            meal:{
+              select:{
+                mealType:true
+              }
+            }
+          }
+        },
+      }
+    });
+    if(!response){
+      return res.status(NOT_FOUND).json({message:"No Pantry found"});
+    }
+    return res.status(OK).json({message:"Successfully Fetched", data:response});
+  } catch (error) {
+    return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})    
+  }
+}
+export const MealTrackingController = async (req:any, res:any)=>{
+  try {
+    const response = await prisma.mealTracking.findMany({});
+    if(!response){
+      return res.status(NOT_FOUND).json({message:"No Meal Tracker found"});
+    }
+    return res.status(OK).json({message:"Successfully Fetched", data:response});
   } catch (error) {
     return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})    
   }

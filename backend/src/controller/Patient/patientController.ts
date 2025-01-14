@@ -102,4 +102,3 @@ export const deletePatient = async (req:any, res:any) => {
       res.status(INTERNAL_SERVER_ERROR).json({ error: 'Failed to delete patient.' });
     }
   };
-  

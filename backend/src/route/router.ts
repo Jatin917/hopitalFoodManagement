@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", (req, res)=>{
     res.send("Backend is running");
 })
-router.use('/patients', authMiddleware, patientRouter);
+router.use('/patients', patientRouter);
 router.use('/diet-charts',authMiddleware, foodManagementRouter);
 router.use('/user', userRouter);
 router.use('/pantry', pantryRouter);
