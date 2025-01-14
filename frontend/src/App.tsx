@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from "./services/Pages/Dashboard";
 import AuthContainer from './services/Pages/AuthContainer';
 import { useEffect, useState } from 'react';
+import InnerPantryDashboard from './services/Pages/InnerPantryDashboard';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(()=>{
@@ -18,7 +19,8 @@ function App() {
       <Router>
         <Routes>
           <Route path='/auth' element={<AuthContainer isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path='/' element={<Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
+          <Route path='/admin' element={<Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
+          <Route path='/pantry' element={<InnerPantryDashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
         </Routes>
       </Router>
       <ToastContainer />

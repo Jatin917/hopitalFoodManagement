@@ -60,3 +60,15 @@ export const createPatient = async (data: PatientType) => {
         return { success: false, message: "An error occurred." };
     }
 };
+
+
+export const getPantryStaff = async () =>{
+    try {
+        const response = await api.get('/pantry/getPantryStaff');
+            if(!response) return {success:false, message:"Cannot Fetched Data"};
+        return {success:true, message:response.data.message, data:response.data.data}
+    } catch (error) {
+        console.error((error as Error).message);
+        return { success: false, message: "An error occurred." };
+    }
+}
