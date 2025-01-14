@@ -1,7 +1,8 @@
-import { TypeOf, z } from "zod";
+import { z } from "zod";
 
 // Enum schemas
 export const RoleEnum = z.enum(["ADMIN", "PANTRY_STAFF", "DELIVERY_PERSONNEL"]);
+export enum roleEnum {ADMIN="ADMIN",PANTRY_STAFF="PANTRY_STAFF",DELIVERY_PERSONNEL="DELIVERY_PERSONNEL"}
 export type RoleType = z.infer<typeof RoleEnum>;
 
 export const GenderEnum = z.enum(["MALE", "FEMALE", "OTHER"]);
