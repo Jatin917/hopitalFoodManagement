@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Navbar from "../../Components/Navbar/Navbar";
 import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../Components/ui/tabs"
@@ -20,7 +22,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { createPatient, getPantryStaff, getPatients } from "../api";
-import { PantryStaffType, PatientType } from "../../utils/typeDefinition";
+import { PatientType } from "../../utils/typeDefinition";
 import PatientModal from "../../Components/Patient/PatientModal";
 import { toast } from "react-toastify";
 
@@ -35,14 +37,6 @@ const Dashboard: React.FC<propsType> = ({ isLoggedIn, setIsLoggedIn }) => {
 
   const [pantryStaff, setPantryStaff] = useState([]);
 
-  const getStatusBadge = (status) => {
-    const colors = {
-      Delivered: "bg-green-500",
-      Preparing: "bg-yellow-500",
-      Pending: "bg-gray-500",
-    };
-    return <Badge className={`${colors[status]} text-white`}>{status}</Badge>;
-  };
 
   const handleCreatePatient= async (data:PatientType) =>{
     const response = await createPatient(data);

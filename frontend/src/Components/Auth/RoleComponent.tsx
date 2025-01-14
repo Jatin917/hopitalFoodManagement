@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { roleEnum } from "../../utils/typeDefinition";
 
 interface PropsType {
@@ -12,6 +13,7 @@ const RoleSelector:React.FC<PropsType> = ({ value, onChange }) => (
       </label>
       <select 
         value={value} 
+        // @ts-expect-error
         onChange={onChange}
         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
       >

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { LogOut, User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 interface propsType {
@@ -9,7 +8,7 @@ interface propsType {
 }
 
 const Navbar:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) => {
-  const [userName, setUserName] = useState('John Doe');
+  const [userName, ] = useState('John Doe');
 
   const handleLogout = () => {
     localStorage.removeItem("token");

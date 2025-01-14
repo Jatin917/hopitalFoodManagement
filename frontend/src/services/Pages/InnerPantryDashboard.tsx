@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../Components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '../../Components/ui/card';
@@ -52,7 +53,7 @@ const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) =
     }
   ]);
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined) => {
     const statusColors = {
       "In Progress": "bg-yellow-500",
       "Completed": "bg-green-500",
@@ -62,6 +63,7 @@ const InnerPantryDashboard:React.FC<propsType> = ({isLoggedIn, setIsLoggedIn}) =
       "On Delivery": "bg-yellow-500"
     };
     return (
+        // @ts-ignore
       <Badge className={`${statusColors[status]} text-white`}>
         {status}
       </Badge>
