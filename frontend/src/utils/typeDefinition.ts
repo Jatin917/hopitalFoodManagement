@@ -7,6 +7,8 @@ export type RoleType = z.infer<typeof RoleEnum>;
 
 export const GenderEnum = z.enum(["MALE", "FEMALE", "OTHER"]);
 export type GenderType = z.infer<typeof GenderEnum>;
+export enum GenderEnumTs {MALE="MALE", FEMALE="FEMALE", OTHER="OTHER"};
+
 
 export const MealTypeEnum = z.enum(["MORNING", "EVENING", "NIGHT"]);
 export type MealEnumType = z.infer<typeof MealTypeEnum>;
