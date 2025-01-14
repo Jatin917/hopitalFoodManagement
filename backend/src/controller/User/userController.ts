@@ -1,9 +1,11 @@
 import { prisma } from "../../server.js";
-import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from "../../utils/statusCode.js";
+import { BAD_REQUEST, CONFLICT, CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, UNAUTHORIZED } from "../../utils/statusCode.js";
 import jwt from 'jsonwebtoken'
 import { SignInSchema, SignUpSchema, UserSchema, UserType } from "../../utils/typesDefinition.js";
-import { any } from "zod";
 
+interface RESULT_PAYLOAD  {
+    id:string
+}
 
 const SECRET_KEY = process.env.SECRET_KEY_JWT || "hellojattu";
 
@@ -69,6 +71,28 @@ export const getAllUser = async (req:any, res:any)=>{
     try {
         const users = await prisma.user.findMany();
         return res.status(OK).json(users);
+    } catch (error) {
+        return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})
+    }
+}
+
+export const tokenAuth = async(req:any, res:any) =>{
+    try {
+        const token = req.body.token;
+        const user = jwt.verify(token, SECRET_KEY) as RESULT_PAYLOAD;
+        if(!user){
+            return res.status(UNAUTHORIZED).json({message:"UNAUTHORIZED"});
+        }
+        const userId = user.id;
+        const userObj = await prisma.user.findFirst({
+            where:{
+                id:parseInt(userId)
+            }
+        });
+        if(!userObj){
+            return res.status(NOT_FOUND).json({message:"NO user found"});
+        }
+        return res.status(OK).json({message:"Successfully Authenticated", role:userObj.role});
     } catch (error) {
         return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})
     }

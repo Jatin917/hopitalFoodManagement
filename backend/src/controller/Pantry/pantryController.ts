@@ -202,11 +202,70 @@ export const getPantryStaff= async (req:any, res:any) =>{
     return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})    
   }
 }
+export const getDeliveryPersonnel = async (req:any, res:any) =>{
+  try {
+    const response = await prisma.user.findMany({
+      where: {
+        role: 'DELIVERY_PERSONNEL'
+      },
+      include:{
+        deliveryTasks:{
+          select:{
+            status:true,
+            deliveredAt:true,
+            meal:{
+              select:{
+                mealType:true
+              }
+            }
+          }
+        },
+        mealTrackingDelivery:true
+      }
+    });
+    if(!response){
+      return res.status(NOT_FOUND).json({message:"No Delivery Person found"});
+    }
+    return res.status(OK).json({message:"Successfully Fetched", data:response});
+  } catch (error) {
+    return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})    
+  }
+}
 export const MealTrackingController = async (req:any, res:any)=>{
   try {
     const response = await prisma.mealTracking.findMany({});
     if(!response){
       return res.status(NOT_FOUND).json({message:"No Meal Tracker found"});
+    }
+    return res.status(OK).json({message:"Successfully Fetched", data:response});
+  } catch (error) {
+    return res.status(INTERNAL_SERVER_ERROR).json({message:(error as Error).message})    
+  }
+}
+export const getPantryTaskController = async (req:any, res:any) =>{
+  try {
+    const response = await prisma.pantryTask.findMany({
+      include:{
+        staff:{
+          select:{
+            name:true,
+            Pantry:{
+              select:{
+                name:true
+              }
+            }
+          }
+        },
+        meal:{
+          select:{
+            mealType:true,
+          }
+        }
+
+      }
+    });
+    if(!response){
+      return res.status(NOT_FOUND).json({message:"No Pantry Task found"});
     }
     return res.status(OK).json({message:"Successfully Fetched", data:response});
   } catch (error) {
