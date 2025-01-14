@@ -6,6 +6,8 @@ import Dashboard from "./services/Pages/Dashboard";
 import AuthContainer from './services/Pages/AuthContainer';
 import { useEffect, useState } from 'react';
 import InnerPantryDashboard from './services/Pages/InnerPantryDashboard';
+import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
+import Me from './Components/ProtectedRoute/Me';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(()=>{
@@ -19,8 +21,9 @@ function App() {
       <Router>
         <Routes>
           <Route path='/auth' element={<AuthContainer isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path='/admin' element={<Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
-          <Route path='/pantry' element={<InnerPantryDashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
+          <Route path='/admin' element={<ProtectedRoute><Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  /></ProtectedRoute>} />
+          <Route path='/pantry' element={<ProtectedRoute><InnerPantryDashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  /></ProtectedRoute>} />
+          <Route path='/' element={<Me />} />
         </Routes>
       </Router>
       <ToastContainer />

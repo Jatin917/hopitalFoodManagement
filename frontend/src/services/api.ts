@@ -92,3 +92,13 @@ export const getDeliveryPerson = async () =>{
         return { success: false, message: "An error occurred." };
     }
 }
+export const checkAuthAndRole = async (data:string) =>{
+    try {
+        const response = await api.post('/user/tokenAuth', {token:data});
+        if(!response) return {success:false, message:"Cannot Auth User"};
+        return {success:true, message:response.data.message, data:response.data}
+    } catch (error) {
+        console.error((error as Error).message);
+        return { success: false, message: "An error occurred." };
+    }
+}
